@@ -1,8 +1,6 @@
-
 name: Build and deploy 
 
 on:
-  
   workflow_dispatch:
 
 jobs:
@@ -26,7 +24,51 @@ jobs:
           name: java-app
           path: '${{ github.workspace }}/target/*.jar'
 
-  deploy:
+  deploy-dev:
+    runs-on: windows-latest
+    needs: build
+    environment:
+      name: 'Development'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: java-app
+
+      - name: Deploy to Azure Web App - Dev
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'projet-note-cicd-dev-back'
+          slot-name: 'dev'
+          publish-profile: ${{ secrets.DEV_AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: '*.jar'
+
+  deploy-qualif:
+    runs-on: windows-latest
+    needs: build
+    environment:
+      name: 'Qualification'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: java-app
+
+      - name: Deploy to Azure Web App - Qualif
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'projet-note-cicd-qualid-back'
+          slot-name: 'qualif'
+          publish-profile: ${{ secrets.QUALIF_AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: '*.jar'
+
+  deploy-prod:
     runs-on: windows-latest
     needs: build
     environment:
@@ -39,11 +81,11 @@ jobs:
         with:
           name: java-app
 
-      - name: Deploy to Azure Web App
+      - name: Deploy to Azure Web App - Prod
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'azure-java'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.public }}
+          app-name: 'projet-note-cicd-prod-back'
+          slot-name: 'production'
+          publish-profile: ${{ secrets.PROD_AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: '*.jar'
