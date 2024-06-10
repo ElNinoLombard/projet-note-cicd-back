@@ -47,7 +47,7 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'projet-note-cicd-dev-back'
-          slot-name: 'dev'
+          slot-name: 'production'
           publish-profile: ${{ secrets.AZURE_CREDENTIALS_DEV_BACK }}
           package: '*.jar'
 
@@ -69,7 +69,7 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'projet-note-cicd-qualif-back'
-          slot-name: 'qualif'
+          slot-name: 'production'
           publish-profile: ${{ secrets.AZURE_CREDENTIALS_QUALIF_BACK }}
           package: '*.jar'
 
