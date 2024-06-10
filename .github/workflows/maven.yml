@@ -49,7 +49,7 @@ jobs:
           app-name: 'projet-note-cicd-dev-back'
           slot-name: 'dev'
           publish-profile: ${{ secrets.DEV_AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: 'java-app/*.jar'
+          package: '*.jar'
 
   deploy-qualif:
     runs-on: windows-latest
@@ -71,7 +71,7 @@ jobs:
           app-name: 'projet-note-cicd-qualif-back'
           slot-name: 'qualif'
           publish-profile: ${{ secrets.QUALIF_AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: 'java-app/*.jar'
+          package: '*.jar'
 
   deploy-prod:
     runs-on: windows-latest
@@ -93,4 +93,4 @@ jobs:
           app-name: 'projet-note-cicd-prod-back'
           slot-name: 'production'
           publish-profile: ${{ secrets.PROD_AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: 'java-app/*.jar'
+          package: '*.jar'
