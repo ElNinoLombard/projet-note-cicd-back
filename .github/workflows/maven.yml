@@ -42,13 +42,17 @@ jobs:
         with:
           name: java-app
 
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_DEV_BACK }}
+
       - name: Deploy to Azure Web App - Dev
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'projet-note-cicd-dev-back'
           slot-name: 'dev'
-          publish-profile: ${{ secrets.DEV_AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: '*.jar'
 
   deploy-qualif:
@@ -64,13 +68,17 @@ jobs:
         with:
           name: java-app
 
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_QUALIF_BACK }}
+
       - name: Deploy to Azure Web App - Qualif
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'projet-note-cicd-qualif-back'
           slot-name: 'qualif'
-          publish-profile: ${{ secrets.QUALIF_AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: '*.jar'
 
   deploy-prod:
@@ -86,11 +94,15 @@ jobs:
         with:
           name: java-app
 
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_PROD_BACK }}
+
       - name: Deploy to Azure Web App - Prod
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'projet-note-cicd-prod-back'
           slot-name: 'production'
-          publish-profile: ${{ secrets.PROD_AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: '*.jar'
